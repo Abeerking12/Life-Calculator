@@ -2,125 +2,94 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>TheLevel8 Life Calculator</title>
+<title>Ghosty Life Calculator</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#7b00ff">
 
 <style>
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  font-family: system-ui, -apple-system, Segoe UI, sans-serif;
-  background: radial-gradient(circle at top, #2b0040, #060010);
-  color: #fff;
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,sans-serif;
+  background:radial-gradient(circle at top,#2b0040,#060010);
+  color:#fff
 }
-
-.wrapper {
-  max-width: 440px;
-  margin: 32px auto;
-  padding: 16px;
+.wrapper{max-width:440px;margin:32px auto;padding:16px}
+.card{
+  background:linear-gradient(180deg,#130026,#090014);
+  border-radius:26px;
+  padding:22px;
+  box-shadow:0 0 35px rgba(140,0,255,.4)
 }
-
-.card {
-  background: linear-gradient(180deg, #130026, #090014);
-  border-radius: 26px;
-  padding: 22px;
-  box-shadow: 0 0 35px rgba(140,0,255,0.4);
+.header{
+  text-align:center;
+  font-size:22px;
+  font-weight:700;
+  padding-bottom:14px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  margin-bottom:18px
 }
-
-.header {
-  text-align: center;
-  font-size: 22px;
-  font-weight: 700;
-  padding-bottom: 14px;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  margin-bottom: 18px;
+label{font-size:14px;opacity:.9}
+input[type=date]{
+  width:100%;
+  padding:15px;
+  margin-top:8px;
+  border-radius:16px;
+  border:none;
+  font-size:16px;
+  outline:none;
+  background:#f3f3f3;
+  appearance:none
 }
-
-label {
-  font-size: 14px;
-  opacity: 0.9;
+button{
+  width:100%;
+  margin-top:14px;
+  padding:16px;
+  border-radius:18px;
+  border:none;
+  font-size:16px;
+  font-weight:700;
+  color:#fff;
+  background:linear-gradient(135deg,#7b00ff,#c800ff);
+  cursor:pointer
 }
-
-input[type="date"] {
-  width: 100%;
-  padding: 15px;
-  margin-top: 8px;
-  border-radius: 16px;
-  border: none;
-  font-size: 16px;
-  outline: none;
-  background-color: #f3f3f3;
-  appearance: none;
-  -webkit-appearance: none;
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08);
+.stats{margin-top:22px;display:none}
+.stat{
+  display:flex;
+  justify-content:space-between;
+  padding:9px 0;
+  font-size:15px
 }
-
-button {
-  width: 100%;
-  margin-top: 14px;
-  padding: 16px;
-  border-radius: 18px;
-  border: none;
-  font-size: 16px;
-  font-weight: 700;
-  color: #fff;
-  background: linear-gradient(135deg, #7b00ff, #c800ff);
-  cursor: pointer;
+.stat span{font-weight:600}
+hr{
+  border:none;
+  height:1px;
+  background:rgba(255,255,255,.08);
+  margin:14px 0
 }
-
-button:active { transform: scale(0.98); }
-
-.stats {
-  margin-top: 22px;
-  display: none;
+.footer{
+  text-align:center;
+  margin-top:12px;
+  font-size:13px;
+  opacity:.7
 }
-
-.stat {
-  display: flex;
-  justify-content: space-between;
-  padding: 9px 0;
-  font-size: 15px;
+.whatsapp-float{
+  position:fixed;
+  bottom:22px;
+  right:18px;
+  width:58px;
+  height:58px;
+  background:#25D366;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 8px 25px rgba(0,0,0,.35);
+  z-index:999
 }
-
-.stat span { font-weight: 600; }
-
-hr {
-  border: none;
-  height: 1px;
-  background: rgba(255,255,255,0.08);
-  margin: 14px 0;
-}
-
-.footer {
-  text-align: center;
-  margin-top: 12px;
-  font-size: 13px;
-  opacity: 0.7;
-}
-
-/* Floating WhatsApp */
-.whatsapp-float {
-  position: fixed;
-  bottom: 22px;
-  right: 18px;
-  width: 58px;
-  height: 58px;
-  background: #25D366;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.35);
-  z-index: 999;
-}
-
-.whatsapp-float img {
-  width: 30px;
-}
+.whatsapp-float img{width:30px}
 </style>
 </head>
 
@@ -128,12 +97,12 @@ hr {
 
 <div class="wrapper">
   <div class="card" id="shareCard">
-    <div class="header">👻 TheLevel8 Life Calculator</div>
+    <div class="header">👻 Ghosty Life Calculator</div>
 
     <label>Enter your birthday</label>
     <input type="date" id="dob">
 
-    <button onclick="startCalc()">Calculate Life Stats</button>
+    <button id="calcBtn">Calculate Life Stats</button>
 
     <div class="stats" id="stats">
       <div class="stat">🎂 Age <span id="age"></span></div>
@@ -165,76 +134,65 @@ target="_blank">
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
 <script>
-let dob;
+let dob=null,interval=null;
 
-const age = document.getElementById("age");
-const daysEl = document.getElementById("days");
-const hoursEl = document.getElementById("hours");
-const minutesEl = document.getElementById("minutes");
-const secondsEl = document.getElementById("seconds");
-const sleep = document.getElementById("sleep");
-const heart = document.getElementById("heart");
-const breath = document.getElementById("breath");
-const earth = document.getElementById("earth");
-const liveTime = document.getElementById("liveTime");
+const age=document.getElementById("age");
+const days=document.getElementById("days");
+const hours=document.getElementById("hours");
+const minutes=document.getElementById("minutes");
+const seconds=document.getElementById("seconds");
+const sleep=document.getElementById("sleep");
+const heart=document.getElementById("heart");
+const breath=document.getElementById("breath");
+const earth=document.getElementById("earth");
+const liveTime=document.getElementById("liveTime");
+const stats=document.getElementById("stats");
+const dobInput=document.getElementById("dob");
 
-function animateValue(el, start, end, duration = 700) {
-  let startTime = null;
-  function animate(t) {
-    if (!startTime) startTime = t;
-    const p = Math.min((t - startTime) / duration, 1);
-    el.innerText = Math.floor(p * (end - start) + start).toLocaleString();
-    if (p < 1) requestAnimationFrame(animate);
-  }
-  requestAnimationFrame(animate);
+document.getElementById("calcBtn").onclick=()=>{
+  if(interval) return;
+  if(!dobInput.value) return alert("Select date of birth");
+
+  dob=new Date(dobInput.value);
+  stats.style.display="block";
+  update();
+  interval=setInterval(update,1000);
+};
+
+function update(){
+  const now=new Date();
+  const diff=now-dob;
+
+  const sec=Math.floor(diff/1000);
+  const min=Math.floor(sec/60);
+  const hr=Math.floor(min/60);
+  const day=Math.floor(hr/24);
+  const yr=(day/365.2422).toFixed(2);
+
+  age.innerText=yr+" yrs";
+  days.innerText=day.toLocaleString();
+  hours.innerText=hr.toLocaleString();
+  minutes.innerText=min.toLocaleString();
+  seconds.innerText=sec.toLocaleString();
+
+  sleep.innerText=(day*8).toLocaleString()+" hrs";
+  heart.innerText=(min*72).toLocaleString();
+  breath.innerText=(min*16).toLocaleString();
+  earth.innerText=day.toLocaleString();
+
+  liveTime.innerText="Live time: "+now.toLocaleString();
 }
 
-function startCalc() {
-  const v = dobInput.value;
-  if (!v) return alert("Select date of birth");
-  dob = new Date(v);
-  stats.style.display = "block";
-  updateStats();
-  setInterval(updateStats, 1000);
-}
-
-function updateStats() {
-  const now = new Date();
-  const diff = now - dob;
-
-  const sec = diff / 1000;
-  const min = sec / 60;
-  const hr = min / 60;
-  const day = hr / 24;
-  const yr = day / 365.2422;
-
-  age.innerText = yr.toFixed(2) + " yrs";
-  animateValue(daysEl, 0, Math.floor(day));
-  animateValue(hoursEl, 0, Math.floor(hr));
-  animateValue(minutesEl, 0, Math.floor(min));
-  animateValue(secondsEl, 0, Math.floor(sec), 900);
-
-  sleep.innerText = Math.floor(day * 8).toLocaleString() + " hrs";
-  animateValue(heart, 0, Math.floor(min * 72), 900);
-  animateValue(breath, 0, Math.floor(min * 16), 900);
-  animateValue(earth, 0, Math.floor(day));
-
-  liveTime.innerText = "Live time: " + now.toLocaleString();
-}
-
-function shareImage() {
-  html2canvas(document.getElementById("shareCard"), {scale:2}).then(c => {
-    const a = document.createElement("a");
-    a.href = c.toDataURL("image/png");
-    a.download = "ghosty-life-stats.png";
+function shareImage(){
+  html2canvas(document.getElementById("shareCard"),{scale:2}).then(c=>{
+    const a=document.createElement("a");
+    a.href=c.toDataURL("image/png");
+    a.download="ghosty-life-stats.png";
     a.click();
   });
 }
 
-const dobInput = document.getElementById("dob");
-const stats = document.getElementById("stats");
-
-if ("serviceWorker" in navigator) {
+if("serviceWorker"in navigator){
   navigator.serviceWorker.register("sw.js");
 }
 </script>
