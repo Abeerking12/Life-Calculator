@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,7 +42,8 @@ input[type=date]{
   font-size:16px;
   outline:none;
   background:#f3f3f3;
-  appearance:none
+  appearance:none;
+  -webkit-appearance:none
 }
 button{
   width:100%;
@@ -136,25 +138,17 @@ target="_blank">
 <script>
 let dob=null,interval=null;
 
-const age=document.getElementById("age");
-const days=document.getElementById("days");
-const hours=document.getElementById("hours");
-const minutes=document.getElementById("minutes");
-const seconds=document.getElementById("seconds");
-const sleep=document.getElementById("sleep");
-const heart=document.getElementById("heart");
-const breath=document.getElementById("breath");
-const earth=document.getElementById("earth");
-const liveTime=document.getElementById("liveTime");
-const stats=document.getElementById("stats");
-const dobInput=document.getElementById("dob");
+const el={
+  age:age,days:days,hours:hours,minutes:minutes,seconds:seconds,
+  sleep:sleep,heart:heart,breath:breath,earth:earth,live:liveTime,
+  stats:stats,dob:dobInput=document.getElementById("dob")
+};
 
 document.getElementById("calcBtn").onclick=()=>{
   if(interval) return;
-  if(!dobInput.value) return alert("Select date of birth");
-
-  dob=new Date(dobInput.value);
-  stats.style.display="block";
+  if(!el.dob.value) return alert("Select date of birth");
+  dob=new Date(el.dob.value);
+  el.stats.style.display="block";
   update();
   interval=setInterval(update,1000);
 };
@@ -169,18 +163,18 @@ function update(){
   const day=Math.floor(hr/24);
   const yr=(day/365.2422).toFixed(2);
 
-  age.innerText=yr+" yrs";
-  days.innerText=day.toLocaleString();
-  hours.innerText=hr.toLocaleString();
-  minutes.innerText=min.toLocaleString();
-  seconds.innerText=sec.toLocaleString();
+  el.age.innerText=yr+" yrs";
+  el.days.innerText=day.toLocaleString();
+  el.hours.innerText=hr.toLocaleString();
+  el.minutes.innerText=min.toLocaleString();
+  el.seconds.innerText=sec.toLocaleString();
 
-  sleep.innerText=(day*8).toLocaleString()+" hrs";
-  heart.innerText=(min*72).toLocaleString();
-  breath.innerText=(min*16).toLocaleString();
-  earth.innerText=day.toLocaleString();
+  el.sleep.innerText=(day*8).toLocaleString()+" hrs";
+  el.heart.innerText=(min*72).toLocaleString();
+  el.breath.innerText=(min*16).toLocaleString();
+  el.earth.innerText=day.toLocaleString();
 
-  liveTime.innerText="Live time: "+now.toLocaleString();
+  el.live.innerText="Live time: "+now.toLocaleString();
 }
 
 function shareImage(){
