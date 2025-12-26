@@ -55,7 +55,6 @@ button{
   background:linear-gradient(135deg,#7b00ff,#c800ff);
   cursor:pointer
 }
-button:disabled{opacity:.6;cursor:not-allowed}
 .stats{margin-top:22px;display:none}
 .stat{
   display:flex;
@@ -135,77 +134,67 @@ target="_blank">
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
 <script>
-(() => {
-  let dob = null;
-  let timer = null;
+let dob=null,interval=null;
 
-  const $ = id => document.getElementById(id);
+const age=document.getElementById("age");
+const days=document.getElementById("days");
+const hours=document.getElementById("hours");
+const minutes=document.getElementById("minutes");
+const seconds=document.getElementById("seconds");
+const sleep=document.getElementById("sleep");
+const heart=document.getElementById("heart");
+const breath=document.getElementById("breath");
+const earth=document.getElementById("earth");
+const liveTime=document.getElementById("liveTime");
+const stats=document.getElementById("stats");
+const dobInput=document.getElementById("dob");
 
-  const el = {
-    age: $("age"),
-    days: $("days"),
-    hours: $("hours"),
-    minutes: $("minutes"),
-    seconds: $("seconds"),
-    sleep: $("sleep"),
-    heart: $("heart"),
-    breath: $("breath"),
-    earth: $("earth"),
-    live: $("liveTime"),
-    stats: $("stats"),
-    dob: $("dob"),
-    btn: $("calcBtn")
-  };
+document.getElementById("calcBtn").onclick=()=>{
+  if(interval) return;
+  if(!dobInput.value) return alert("Select date of birth");
 
-  el.btn.onclick = () => {
-    if (timer) return;
-    if (!el.dob.value) return alert("Select date of birth");
+  dob=new Date(dobInput.value);
+  stats.style.display="block";
+  update();
+  interval=setInterval(update,1000);
+};
 
-    dob = new Date(el.dob.value);
-    el.stats.style.display = "block";
-    el.btn.disabled = true;
+function update(){
+  const now=new Date();
+  const diff=now-dob;
 
-    update();
-    timer = setInterval(update, 1000);
-  };
+  const sec=Math.floor(diff/1000);
+  const min=Math.floor(sec/60);
+  const hr=Math.floor(min/60);
+  const day=Math.floor(hr/24);
+  const yr=(day/365.2422).toFixed(2);
 
-  function update() {
-    const now = new Date();
-    const diff = now - dob;
+  age.innerText=yr+" yrs";
+  days.innerText=day.toLocaleString();
+  hours.innerText=hr.toLocaleString();
+  minutes.innerText=min.toLocaleString();
+  seconds.innerText=sec.toLocaleString();
 
-    const sec = Math.floor(diff / 1000);
-    const min = Math.floor(sec / 60);
-    const hr = Math.floor(min / 60);
-    const day = Math.floor(hr / 24);
-    const yr = (diff / (1000 * 60 * 60 * 24 * 365.2422)).toFixed(2);
+  sleep.innerText=(day*8).toLocaleString()+" hrs";
+  heart.innerText=(min*72).toLocaleString();
+  breath.innerText=(min*16).toLocaleString();
+  earth.innerText=day.toLocaleString();
 
-    el.age.textContent = yr + " yrs";
-    el.days.textContent = day.toLocaleString();
-    el.hours.textContent = hr.toLocaleString();
-    el.minutes.textContent = min.toLocaleString();
-    el.seconds.textContent = sec.toLocaleString();
+  liveTime.innerText="Live time: "+now.toLocaleString();
+}
 
-    el.sleep.textContent = (day * 8).toLocaleString() + " hrs";
-    el.heart.textContent = (min * 72).toLocaleString();
-    el.breath.textContent = (min * 16).toLocaleString();
-    el.earth.textContent = day.toLocaleString();
+function shareImage(){
+  html2canvas(document.getElementById("shareCard"),{scale:2}).then(c=>{
+    const a=document.createElement("a");
+    a.href=c.toDataURL("image/png");
+    a.download="ghosty-life-stats.png";
+    a.click();
+  });
+}
 
-    el.live.textContent = "Live time: " + now.toLocaleString();
-  }
-
-  window.shareImage = () => {
-    html2canvas($("shareCard"), { scale: 2 }).then(c => {
-      const a = document.createElement("a");
-      a.href = c.toDataURL("image/png");
-      a.download = "ghosty-life-stats.png";
-      a.click();
-    });
-  };
-
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("sw.js");
-  }
-})();
+if("serviceWorker"in navigator){
+  navigator.serviceWorker.register("sw.js");
+}
 </script>
 
 </body>
